@@ -2,6 +2,7 @@
 
 ![Swift](http://img.shields.io/badge/swift-4.1-brightgreen.svg)
 ![Vapor](http://img.shields.io/badge/vapor-3.1-brightgreen.svg)
+[![CircleCI](https://circleci.com/gh/m-maillot/firebase-provider.svg?style=svg)](https://circleci.com/gh/m-maillot/firebase-provider)
 
 ## Getting Started
 In your `Package.swift` file, add the following

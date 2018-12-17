@@ -3,5 +3,5 @@ import XCTest
 import FirebaseTests
 
 var tests = [XCTestCaseEntry]()
-tests += ProviderTests.allTests()
+tests += FirebaseTests.allTests()
 XCTMain(tests)
