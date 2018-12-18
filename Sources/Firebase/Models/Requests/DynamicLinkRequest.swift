@@ -13,7 +13,7 @@ public struct DynamicLinkRequest: FirebaseRequestModel {
 
 public struct DynamicLinkInfo: FirebaseRequestModel {
 
-    public let domainUriPrefix: String
+    public let domainUriPrefix: String?
     public let link: String
     public let androidInfo: Android?
     public let iosInfo: Ios?
@@ -21,7 +21,7 @@ public struct DynamicLinkInfo: FirebaseRequestModel {
     public let analyticsInfo: Analytics?
     public let socialMetaTagInfo: SocialMetaTag?
 
-    public init(domainUriPrefix: String,
+    public init(domainUriPrefix: String? = nil,
                 link: String,
                 androidInfo: Android? = nil,
                 iosInfo: Ios? = nil,
