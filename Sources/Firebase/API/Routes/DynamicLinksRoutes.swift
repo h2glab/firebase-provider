@@ -7,7 +7,7 @@ public protocol DynamicLinksRoute {
 public struct FirebaseDynamicLinksRoute: DynamicLinksRoute {
 
     private let request: FirebaseRequest
-    
+
     init(request: FirebaseRequest) {
         self.request = request
     }
