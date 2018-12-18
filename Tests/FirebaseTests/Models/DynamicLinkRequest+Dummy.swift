@@ -4,6 +4,6 @@ import Foundation
 extension DynamicLinkRequest {
 
     static var dummy: DynamicLinkRequest {
-        return DynamicLinkRequest(dynamicLink: DynamicLinkInfo(domainUriPrefix: "http://domainUriPrefix", link: "http://link"), suffix: Suffix(option: .SHORT))
+        return DynamicLinkRequest(dynamicLink: DynamicLinkInfo(link: "http://link"), suffix: Suffix(option: .SHORT))
     }
 }
