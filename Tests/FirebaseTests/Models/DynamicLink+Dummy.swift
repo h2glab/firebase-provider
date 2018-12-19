@@ -4,6 +4,6 @@ import Foundation
 extension DynamicLink {
     
     static var dummy: DynamicLink {
-        return DynamicLink(shortLink: URL(string: "https://shortLink")!, previewLink: URL(string: "https://previewLink")!)
+        return DynamicLink(shortLink: URL(string: "https://shortLink")!, previewLink: URL(string: "https://previewLink")!, warning: nil)
     }
 }
