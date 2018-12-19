@@ -4,7 +4,8 @@ class ClientStub: Client {
     
     var container: Container
     let responseText: String
-    let error: Error?
+    let error: String?
+    let httpStatus: HTTPStatus
 
     var calls: [HttpCall] = []
     
@@ -12,24 +13,31 @@ class ClientStub: Client {
         self.responseText = responseText
         self.container = ContainerStub()
         self.error = nil
+        self.httpStatus = .ok
     }
     
-    init(withError error: Error) {
+    init(withError error: String, withStatus httpStatus: HTTPStatus) {
         self.responseText = ""
         self.container = ContainerStub()
         self.error = error
+        self.httpStatus = httpStatus
     }
     
     func send(_ req: Request) -> EventLoopFuture<Response> {
         calls.append(HttpCall(request: req))
         if let error = self.error {
-            return self.container.future(error: error)
+            return self.container.future().map(to: Response.self) {
+                let httpBody = HTTPBody(string: error)
+                var httpHeaders = HTTPHeaders()
+                httpHeaders.add(name: HTTPHeaderName.contentType, value: MediaType.json.description)
+                return Response(http: HTTPResponse(status: self.httpStatus, headers: httpHeaders, body: httpBody), using: self.container)
+            }
         }
         return self.container.future().map(to: Response.self) {
             let httpBody = HTTPBody(string: self.responseText)
             var httpHeaders = HTTPHeaders()
             httpHeaders.add(name: HTTPHeaderName.contentType, value: MediaType.json.description)
-            return Response(http: HTTPResponse(headers: httpHeaders, body: httpBody), using: self.container)
+            return Response(http: HTTPResponse(status: self.httpStatus, headers: httpHeaders, body: httpBody), using: self.container)
         }
     }
     
