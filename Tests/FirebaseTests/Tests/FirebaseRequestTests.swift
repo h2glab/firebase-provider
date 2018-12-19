@@ -129,22 +129,60 @@ final class FirebaseRequestTests: XCTestCase {
         XCTAssertEqual(call.body.convertToHTTPBody().data, HTTPBody(string: expectedBody).data)
     }
     
-    func test_firebaseRequest_should_returnError_when_callFailed() throws {
+    func test_firebaseRequest_should_parseFirebaseError_when_callFailed() throws {
         // Given
-        let clientStub = ClientStub(withError: FirebaseError(error: "Error during API call"))
+        let error = """
+                            {
+                                "error": {
+                                    "code": 0,
+                                    "message": "Unknown error",
+                                    "status": "UNKNOWN"
+                                }
+                            }
+                            """
+        let clientStub = ClientStub(withError: error, withStatus: HTTPStatus.notFound)
         let firebaseApiRequest = FirebaseAPIRequest.dummy(client: clientStub)
         let fakeRoute = FakeRoute(request: firebaseApiRequest)
-        let expectedBody = String.random(length: 10)
         
         // When
-        let result = try fakeRoute.fake(body: expectedBody)
+        let result = try fakeRoute.fake()
         
         // Then
-        let _ = result.catch { error in
-            XCTAssertEqual(error.localizedDescription, "⚠️ [FirebaseError.Error during API call: Error during API call]")
-        }.do { _ in
-            XCTFail("No error raised")
-        }
+        let _ = result
+            .catch { error in
+                if let firebaseError = error as? FirebaseError {
+                    XCTAssertEqual(firebaseError.identifier, String(FirebaseErrorCode.unknown.rawValue))
+                    XCTAssertEqual(firebaseError.reason, "Unknown error")
+                    XCTAssertEqual(firebaseError.error.status, "UNKNOWN")
+                } else {
+                    XCTFail("Unexpected error: \(error.localizedDescription)")
+                }
+            }
+            .do { _ in XCTFail("No error raised") }
+    }
+    
+    func test_firebaseRequest_should_createDefaultError_when_errorContentHasWrongFormat() throws {
+        // Given
+        let error = "Wrong format, expected json"
+        let clientStub = ClientStub(withError: error, withStatus: HTTPStatus.notFound)
+        let firebaseApiRequest = FirebaseAPIRequest.dummy(client: clientStub)
+        let fakeRoute = FakeRoute(request: firebaseApiRequest)
+        
+        // When
+        let result = try fakeRoute.fake()
+        
+        // Then
+        let _ = result
+            .catch { error in
+                if let firebaseError = error as? FirebaseError {
+                    XCTAssertEqual(firebaseError.identifier, String(FirebaseErrorCode.unknown.rawValue))
+                    XCTAssertFalse(firebaseError.reason.isEmpty)
+                    XCTAssertNil(firebaseError.error.status)
+                } else {
+                    XCTFail("Unexpected error: \(error.localizedDescription)")
+                }
+            }
+            .do { _ in XCTFail("No error raised") }
     }
     
     static var allTests = [
@@ -156,6 +194,7 @@ final class FirebaseRequestTests: XCTestCase {
         ("test_firebaseRequest_should_addHeadersToRequest_when_callWithCustomHeaders", test_firebaseRequest_should_addHeadersToRequest_when_callWithCustomHeaders),
         ("test_firebaseRequest_should_addQuery_when_callWithQuery", test_firebaseRequest_should_addQuery_when_callWithQuery),
         ("test_firebaseRequest_should_addBody_when_callWithBodyData", test_firebaseRequest_should_addBody_when_callWithBodyData),
-        ("test_firebaseRequest_should_returnError_when_callFailed", test_firebaseRequest_should_returnError_when_callFailed),
+        ("test_firebaseRequest_should_parseFirebaseError_when_callFailed", test_firebaseRequest_should_parseFirebaseError_when_callFailed),
+        ("test_firebaseRequest_should_createDefaultError_when_errorContentHasWrongFormat", test_firebaseRequest_should_createDefaultError_when_errorContentHasWrongFormat),
         ]
 }
