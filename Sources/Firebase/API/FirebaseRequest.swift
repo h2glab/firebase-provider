@@ -17,9 +17,13 @@ public extension FirebaseRequest {
         let decoder = JSONDecoder()
 
         guard response.status == .ok else {
-            return try decoder.decode(FirebaseError.self, from: response, maxSize: maxStreamingBodySize, on: worker).map(to: FM.self) { error in
-                throw error
-            }
+            return try decoder.decode(FirebaseError.self, from: response, maxSize: maxStreamingBodySize, on: worker)
+                .map(to: FM.self) { error in throw error }
+                .catchMap { error in
+                    if let error = error as? FirebaseError {
+                        throw error
+                    }
+                    throw FirebaseError(error: error) }
         }
 
         return try decoder.decode(FM.self, from: response, maxSize: maxStreamingBodySize, on: worker)
