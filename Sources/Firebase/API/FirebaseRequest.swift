@@ -55,9 +55,9 @@ public class FirebaseAPIRequest: FirebaseRequest {
     
     fileprivate func formatUrl(_ url: String, with query: String) -> String {
         if query.isEmpty {
-            return "\(url)?apiKey=\(apiKey)"
+            return "\(url)?key=\(apiKey)"
         } else {
-            return "\(url)?\(query)&apiKey=\(apiKey)"
+            return "\(url)?\(query)&key=\(apiKey)"
         }
     }
 }
