@@ -28,7 +28,7 @@ final class FirebaseRequestTests: XCTestCase {
         let _ = try fakeRoute.fake()
         
         // Then
-        XCTAssertNotNil(clientStub.calls.first?.url.absoluteString.range(of: "?apiKey=\(expectedApiKey)"))
+        XCTAssertNotNil(clientStub.calls.first?.url.absoluteString.range(of: "?key=\(expectedApiKey)"))
     }
     
     func test_firebaseRequest_should_addApiKeyToUrl_when_pathProvided() throws {
@@ -42,7 +42,7 @@ final class FirebaseRequestTests: XCTestCase {
         let _ = try fakeRoute.fake(query: "test=1")
         
         // Then
-        XCTAssertNotNil(clientStub.calls.first?.url.absoluteString.range(of: "&apiKey=\(expectedApiKey)"))
+        XCTAssertNotNil(clientStub.calls.first?.url.absoluteString.range(of: "&key=\(expectedApiKey)"))
     }
     
     func test_firebaseRequest_should_callWithRightMethod_when_setSpecificMethod() throws {
