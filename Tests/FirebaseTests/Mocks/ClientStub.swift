@@ -27,14 +27,14 @@ class ClientStub: Client {
         calls.append(HttpCall(request: req))
         if let error = self.error {
             return self.container.future().map(to: Response.self) {
-                let httpBody = HTTPBody(string: error)
+                let httpBody = error.convertToHTTPBody()
                 var httpHeaders = HTTPHeaders()
                 httpHeaders.add(name: HTTPHeaderName.contentType, value: MediaType.json.description)
                 return Response(http: HTTPResponse(status: self.httpStatus, headers: httpHeaders, body: httpBody), using: self.container)
             }
         }
         return self.container.future().map(to: Response.self) {
-            let httpBody = HTTPBody(string: self.responseText)
+            let httpBody = self.responseText.convertToHTTPBody()
             var httpHeaders = HTTPHeaders()
             httpHeaders.add(name: HTTPHeaderName.contentType, value: MediaType.json.description)
             return Response(http: HTTPResponse(status: self.httpStatus, headers: httpHeaders, body: httpBody), using: self.container)

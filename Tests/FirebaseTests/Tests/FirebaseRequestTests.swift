@@ -129,7 +129,7 @@ final class FirebaseRequestTests: XCTestCase {
         XCTAssertEqual(call.body.convertToHTTPBody().data, expectedBody.convertToHTTPBody().data)
     }
     
-    func test_firebaseRequest_should_parseFirebaseError_when_callFailed() throws {
+    func test_firebaseRequest_should_throwAnError_when_apiReturnError() throws {
         // Given
         let error = """
                             {
@@ -153,6 +153,41 @@ final class FirebaseRequestTests: XCTestCase {
             XCTFail("Expected an error but no error has been raised")
         }
     }
+    
+    func test_firebaseRequest_should_provideFirebaseError_when_apiReturnError() throws {
+        // Given
+        let expectedMessage = "Unknown error"
+        let expectedStatus = "UNKNOWN"
+        let error = """
+                            {
+                                "error": {
+                                    "code": 0,
+                                    "message": "\(expectedMessage)",
+                                    "status": "\(expectedStatus)"
+                                }
+                            }
+                            """
+        let clientStub = ClientStub(withError: error, withStatus: HTTPStatus.notFound)
+        let firebaseApiRequest = FirebaseAPIRequest.dummy(client: clientStub)
+        let fakeRoute = FakeRoute(request: firebaseApiRequest)
+        let body = String.random(length: 10)
+        
+        // When
+        let result = try fakeRoute.sendRequest(body: body)
+        
+        // Then
+        let _ = result.catch { error in
+            if let firebaseError = error as? FirebaseError {
+                XCTAssertEqual(firebaseError.identifier, String(FirebaseErrorCode.unknown.rawValue))
+                XCTAssertEqual(firebaseError.reason, expectedMessage)
+                XCTAssertEqual(firebaseError.error.status, expectedStatus)
+            } else {
+                XCTFail("Unexpected error: \(error.localizedDescription)")
+            }
+        }.do { _ in
+            XCTFail("Expected an error but no error has been raised")
+        }
+    }
 
     func test_firebaseRequest_should_createDefaultError_when_errorContentHasWrongFormat() throws {
         // Given
@@ -162,7 +197,7 @@ final class FirebaseRequestTests: XCTestCase {
         let fakeRoute = FakeRoute(request: firebaseApiRequest)
 
         // When
-        let result = try fakeRoute.fake()
+        let result = try fakeRoute.sendRequest()
 
         // Then
         let _ = result
@@ -187,7 +222,8 @@ final class FirebaseRequestTests: XCTestCase {
         ("test_firebaseRequest_should_addHeadersToRequest_when_callWithCustomHeaders", test_firebaseRequest_should_addHeadersToRequest_when_callWithCustomHeaders),
         ("test_firebaseRequest_should_addQuery_when_callWithQuery", test_firebaseRequest_should_addQuery_when_callWithQuery),
         ("test_firebaseRequest_should_addBody_when_callWithBodyData", test_firebaseRequest_should_addBody_when_callWithBodyData),
-        ("test_firebaseRequest_should_parseFirebaseError_when_callFailed", test_firebaseRequest_should_parseFirebaseError_when_callFailed),
+        ("test_firebaseRequest_should_throwAnError_when_apiReturnError", test_firebaseRequest_should_throwAnError_when_apiReturnError),
+        ("test_firebaseRequest_should_provideFirebaseError_when_apiReturnError", test_firebaseRequest_should_provideFirebaseError_when_apiReturnError),
         ("test_firebaseRequest_should_createDefaultError_when_errorContentHasWrongFormat", test_firebaseRequest_should_createDefaultError_when_errorContentHasWrongFormat),
         ]
 }
