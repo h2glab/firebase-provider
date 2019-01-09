@@ -1,10 +1,10 @@
-import XCTest
 @testable import Firebase
-@testable import Vapor
+import Vapor
+import XCTest
 
 final class DynamicLinksRoutesTests: XCTestCase {
 
-    func test_routeRequests_should_beInJson_when_encodedBody() throws {
+    func test_routeRequests_should_beInJson_when_encodingBody() throws {
         // Given
         let request = DynamicLinkRequest(dynamicLink: DynamicLinkRequest.DynamicLink(link: URL(string: "http://link")!),
                 suffix: DynamicLinkRequest.Suffix(option: .SHORT))
@@ -37,14 +37,14 @@ final class DynamicLinksRoutesTests: XCTestCase {
             } else {
                 XCTFail("Expected a short links call")
             }
-            XCTAssertEqual(calls.capacity, 1)
+            XCTAssertEqual(calls.count, 1)
         }.catch { (error) in
             XCTFail("\(error)")
         }
     }
 
     static var allTests = [
-        ("test_routeRequests_should_beInJson_when_encodedBody", test_routeRequests_should_beInJson_when_encodedBody),
+        ("test_routeRequests_should_beInJson_when_encodingBody", test_routeRequests_should_beInJson_when_encodingBody),
         ("test_createShortLink_should_callShortLinksEndpointOnce_on_call", test_createShortLink_should_callShortLinksEndpointOnce_on_call),
     ]
 }
