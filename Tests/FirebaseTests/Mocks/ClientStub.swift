@@ -1,4 +1,4 @@
-@testable import Vapor
+import Vapor
 
 class ClientStub: Client {
     
@@ -44,13 +44,6 @@ struct HttpCall {
     var url: URL
     var body: LosslessHTTPBodyRepresentable
     var headers: HTTPHeaders
-
-    init(method: HTTPMethod, url: URL, body: LosslessHTTPBodyRepresentable, headers: HTTPHeaders) {
-        self.method = method
-        self.url = url
-        self.body = body
-        self.headers = headers
-    }
 }
 
 extension HttpCall {

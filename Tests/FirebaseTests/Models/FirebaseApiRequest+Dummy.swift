@@ -1,6 +1,6 @@
-import Foundation
 @testable import Firebase
-@testable import Vapor
+import Foundation
+import Vapor
 
 extension FirebaseAPIRequest {
     

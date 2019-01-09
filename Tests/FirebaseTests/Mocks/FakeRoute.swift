@@ -1,5 +1,5 @@
 @testable import Firebase
-@testable import Vapor
+import Vapor
 
 class FakeRoute {
     

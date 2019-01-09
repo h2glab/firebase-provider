@@ -1,6 +1,6 @@
-import XCTest
 @testable import Firebase
-@testable import Vapor
+import Vapor
+import XCTest
 
 final class FirebaseRequestTests: XCTestCase {
     
