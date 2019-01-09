@@ -6,7 +6,7 @@ public struct DynamicLinkRequest: FirebaseRequestModel {
     public let dynamicLinkInfo: DynamicLink
     public let suffix: Suffix
 
-    public init(dynamicLink: DynamicLink, suffix: Suffix) {
+    public init(dynamicLink: DynamicLink, suffix: Suffix = Suffix()) {
         self.dynamicLinkInfo = dynamicLink
         self.suffix = suffix
     }
