@@ -14,7 +14,7 @@ final class FirebaseRequestTests: XCTestCase {
         let _ = try fakeRoute.sendRequest()
         
         // Then
-        XCTAssertEqual(clientStub.calls.capacity, 1)
+        XCTAssertEqual(clientStub.calls.count, 1)
     }
     
     func test_firebaseRequest_should_addApiKeyToUrl_when_noPathProvided() throws {
