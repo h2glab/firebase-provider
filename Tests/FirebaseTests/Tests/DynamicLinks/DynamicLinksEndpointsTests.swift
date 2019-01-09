@@ -4,7 +4,7 @@ import XCTest
 
 final class DynamicLinksEndpointsTests: XCTestCase {
     
-    func test_shortinkEndpoint_value() throws {
+    func test_shortLinkEndpoint_value() throws {
         // Given
         let expectedEnpoint = "https://firebasedynamiclinks.googleapis.com/v1/shortLinks"
         
@@ -16,6 +16,6 @@ final class DynamicLinksEndpointsTests: XCTestCase {
     }
     
     static var allTests = [
-        ("test_shortinkEndpoint_value", test_shortinkEndpoint_value),
+        ("test_shortLinkEndpoint_value", test_shortLinkEndpoint_value),
         ]
 }

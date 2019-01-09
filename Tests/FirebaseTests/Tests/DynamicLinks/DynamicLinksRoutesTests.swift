@@ -6,8 +6,8 @@ final class DynamicLinksRoutesTests: XCTestCase {
 
     func test_routeRequests_should_beInJson_when_encodedBody() throws {
         // Given
-        let request = DynamicLinkRequest(dynamicLink: DynamicLinkInfo(link: "http://link"),
-                suffix: Suffix(option: .SHORT))
+        let request = DynamicLinkRequest(dynamicLink: DynamicLinkRequest.DynamicLink(link: "http://link"),
+                suffix: DynamicLinkRequest.Suffix(option: .SHORT))
         let expectedJson = "{\"suffix\":{\"option\":\"SHORT\"},\"dynamicLinkInfo\":{\"link\":\"http:\\/\\/link\"}}"
 
         // When
@@ -17,10 +17,10 @@ final class DynamicLinksRoutesTests: XCTestCase {
         XCTAssertEqual(json, expectedJson)
     }
 
-    func test_createShortLink_should_callShortLinksEndpointOnceTime_on_call() throws {
+    func test_createShortLink_should_callShortLinksEndpointOnce_on_call() throws {
         // Given
         let httpClient = try ClientStub(responseText: DynamicLink.dummy.toJson())
-        let route = FirebaseDynamicLinksRoutes(request: FirebaseAPIRequest.dummy(client: httpClient))
+        let route = FirebaseDynamicLinksRoute(request: FirebaseAPIRequest.dummy(client: httpClient))
         let request = DynamicLinkRequest.dummy
         let expectedJson = try request.toEncodedBody()
 
@@ -45,6 +45,6 @@ final class DynamicLinksRoutesTests: XCTestCase {
 
     static var allTests = [
         ("test_routeRequests_should_beInJson_when_encodedBody", test_routeRequests_should_beInJson_when_encodedBody),
-        ("test_createShortLink_should_callShortLinksEndpointOnceTime_on_call", test_createShortLink_should_callShortLinksEndpointOnceTime_on_call),
+        ("test_createShortLink_should_callShortLinksEndpointOnce_on_call", test_createShortLink_should_callShortLinksEndpointOnce_on_call),
     ]
 }
