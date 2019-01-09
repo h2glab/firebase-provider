@@ -1,10 +1,10 @@
 import Vapor
 
-public protocol DynamicLinksRoutes {
+public protocol DynamicLinksRoute {
     func createShortLink(param: DynamicLinkRequest) throws -> Future<DynamicLink>
 }
 
-public struct FirebaseDynamicLinksRoutes: DynamicLinksRoutes {
+public struct FirebaseDynamicLinksRoute: DynamicLinksRoute {
 
     private let request: FirebaseRequest
     

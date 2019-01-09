@@ -31,11 +31,11 @@ public final class FirebaseProvider: Provider {
 
 public final class FirebaseClient: Service {
 
-    public var dynamicLinks: DynamicLinksRoutes
+    public var dynamicLinks: DynamicLinksRoute
 
     internal init(apiKey: String, client: Client) {
         let apiRequest = FirebaseAPIRequest(httpClient: client, apiKey: apiKey)
 
-        dynamicLinks = FirebaseDynamicLinksRoutes(request: apiRequest)
+        dynamicLinks = FirebaseDynamicLinksRoute(request: apiRequest)
     }
 }
