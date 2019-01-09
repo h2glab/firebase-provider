@@ -4,7 +4,7 @@ import XCTest
 
 final class FirebaseRequestTests: XCTestCase {
     
-    func test_firebaseRequest_should_makeHttpCall_when_sendRequest() throws {
+    func test_firebaseRequest_should_makeHttpCall_when_sendingRequest() throws {
         // Given
         let clientStub = ClientStub(responseText: "")
         let firebaseApiRequest = FirebaseAPIRequest.dummy(client: clientStub)
@@ -148,7 +148,7 @@ final class FirebaseRequestTests: XCTestCase {
     }
     
     static var allTests = [
-        ("test_firebaseRequest_should_makeHttpCall_when_sendRequest", test_firebaseRequest_should_makeHttpCall_when_sendRequest),
+        ("test_firebaseRequest_should_makeHttpCall_when_sendingRequest", test_firebaseRequest_should_makeHttpCall_when_sendingRequest),
         ("test_firebaseRequest_should_addApiKeyToUrl_when_noPathProvided", test_firebaseRequest_should_addApiKeyToUrl_when_noPathProvided),
         ("test_firebaseRequest_should_addApiKeyToUrl_when_pathProvided", test_firebaseRequest_should_addApiKeyToUrl_when_pathProvided),
         ("test_firebaseRequest_should_callWithRightMethod_when_setSpecificMethod", test_firebaseRequest_should_callWithRightMethod_when_setSpecificMethod),
