@@ -126,7 +126,7 @@ final class FirebaseRequestTests: XCTestCase {
             XCTFail("No body found")
             return
         }
-        XCTAssertEqual(call.body.convertToHTTPBody().data, HTTPBody(string: expectedBody).data)
+        XCTAssertEqual(call.body.convertToHTTPBody().data, expectedBody.convertToHTTPBody().data)
     }
     
     func test_firebaseRequest_should_returnError_when_callFailed() throws {
@@ -134,16 +134,14 @@ final class FirebaseRequestTests: XCTestCase {
         let clientStub = ClientStub(withError: FirebaseError(error: "Error during API call"))
         let firebaseApiRequest = FirebaseAPIRequest.dummy(client: clientStub)
         let fakeRoute = FakeRoute(request: firebaseApiRequest)
-        let expectedBody = String.random(length: 10)
+        let body = String.random(length: 10)
         
         // When
-        let result = try fakeRoute.sendRequest(body: expectedBody)
+        let result = try fakeRoute.sendRequest(body: body)
         
         // Then
-        let _ = result.catch { error in
-            XCTAssertEqual(error.localizedDescription, "⚠️ [FirebaseError.Error during API call: Error during API call]")
-        }.do { _ in
-            XCTFail("No error raised")
+        let _ = result.do { _ in
+            XCTFail("Expected an error but no error has been raised")
         }
     }
     
