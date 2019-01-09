@@ -11,7 +11,7 @@ final class FirebaseRequestTests: XCTestCase {
         let fakeRoute = FakeRoute(request: firebaseApiRequest)
         
         // When
-        let _ = try fakeRoute.fake()
+        let _ = try fakeRoute.sendRequest()
         
         // Then
         XCTAssertEqual(clientStub.calls.capacity, 1)
@@ -25,7 +25,7 @@ final class FirebaseRequestTests: XCTestCase {
         let fakeRoute = FakeRoute(request: firebaseApiRequest)
         
         // When
-        let _ = try fakeRoute.fake()
+        let _ = try fakeRoute.sendRequest()
         
         // Then
         XCTAssertNotNil(clientStub.calls.first?.url.absoluteString.range(of: "?key=\(expectedApiKey)"))
@@ -39,7 +39,7 @@ final class FirebaseRequestTests: XCTestCase {
         let fakeRoute = FakeRoute(request: firebaseApiRequest)
         
         // When
-        let _ = try fakeRoute.fake(query: "test=1")
+        let _ = try fakeRoute.sendRequest(query: "test=1")
         
         // Then
         XCTAssertNotNil(clientStub.calls.first?.url.absoluteString.range(of: "&key=\(expectedApiKey)"))
@@ -54,7 +54,7 @@ final class FirebaseRequestTests: XCTestCase {
         let methodToValidate = [HTTPMethod.GET, HTTPMethod.POST, HTTPMethod.PATCH, HTTPMethod.PUT]
         try methodToValidate.forEach { methodToValidate in
             // When
-            let _ = try fakeRoute.fake(method: methodToValidate)
+            let _ = try fakeRoute.sendRequest(method: methodToValidate)
             
             // Then
             XCTAssertEqual(clientStub.calls.first?.method, methodToValidate)
@@ -69,7 +69,7 @@ final class FirebaseRequestTests: XCTestCase {
         let fakeRoute = FakeRoute(request: firebaseApiRequest)
         
         // When
-        let _ = try fakeRoute.fake(url: "https://www.firebase.com")
+        let _ = try fakeRoute.sendRequest(url: "https://www.firebase.com")
         
         // Then
         XCTAssertEqual(clientStub.calls.first?.url.host, "www.firebase.com")
@@ -85,7 +85,7 @@ final class FirebaseRequestTests: XCTestCase {
         let expectedHeaderValue = String.random(length: 10)
         
         // When
-        let _ = try fakeRoute.fake(headers: [expectedHeaderName: expectedHeaderValue])
+        let _ = try fakeRoute.sendRequest(headers: [expectedHeaderName: expectedHeaderValue])
         
         // Then
         guard let _ = clientStub.calls.first?.headers.contains(name: expectedHeaderName) else {
@@ -105,7 +105,7 @@ final class FirebaseRequestTests: XCTestCase {
         let expectedQuery = "\(expectedQueryName)=\(expectedQueryValue)"
         
         // When
-        let _ = try fakeRoute.fake(query: expectedQuery)
+        let _ = try fakeRoute.sendRequest(query: expectedQuery)
         
         // Then
         XCTAssertNotNil(clientStub.calls.first?.url.query?.range(of: expectedQuery))
@@ -119,7 +119,7 @@ final class FirebaseRequestTests: XCTestCase {
         let expectedBody = String.random(length: 10)
         
         // When
-        let _ = try fakeRoute.fake(body: expectedBody)
+        let _ = try fakeRoute.sendRequest(body: expectedBody)
         
         // Then
         guard let call = clientStub.calls.first else {
@@ -137,7 +137,7 @@ final class FirebaseRequestTests: XCTestCase {
         let expectedBody = String.random(length: 10)
         
         // When
-        let result = try fakeRoute.fake(body: expectedBody)
+        let result = try fakeRoute.sendRequest(body: expectedBody)
         
         // Then
         let _ = result.catch { error in

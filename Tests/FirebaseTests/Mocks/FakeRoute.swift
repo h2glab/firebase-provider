@@ -10,7 +10,7 @@ class FakeRoute {
     }
     
     /// Fake route for testing purpose
-    public func fake(method: HTTPMethod = .GET, url: String = "", query: String = "", body: String = "", headers: HTTPHeaders = [:]) throws -> Future<DummyResponse> {
+    public func sendRequest(method: HTTPMethod = .GET, url: String = "", query: String = "", body: String = "", headers: HTTPHeaders = [:]) throws -> Future<DummyResponse> {
         return try request.send(method: method,
                                 url: url,
                                 query: query,
