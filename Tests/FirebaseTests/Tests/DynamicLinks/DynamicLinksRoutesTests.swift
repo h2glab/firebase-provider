@@ -6,7 +6,7 @@ final class DynamicLinksRoutesTests: XCTestCase {
 
     func test_routeRequests_should_beInJson_when_encodedBody() throws {
         // Given
-        let request = DynamicLinkRequest(dynamicLink: DynamicLinkRequest.DynamicLink(link: "http://link"),
+        let request = DynamicLinkRequest(dynamicLink: DynamicLinkRequest.DynamicLink(link: URL(string: "http://link")!),
                 suffix: DynamicLinkRequest.Suffix(option: .SHORT))
         let expectedJson = "{\"suffix\":{\"option\":\"SHORT\"},\"dynamicLinkInfo\":{\"link\":\"http:\\/\\/link\"}}"
 
