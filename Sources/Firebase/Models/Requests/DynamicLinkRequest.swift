@@ -1,3 +1,4 @@
+import Foundation
 import Vapor
 
 public struct DynamicLinkRequest: FirebaseRequestModel {
@@ -12,16 +13,16 @@ public struct DynamicLinkRequest: FirebaseRequestModel {
     
     public struct DynamicLink: FirebaseRequestModel {
         
-        public let domainUriPrefix: String?
-        public let link: String
+        public let domainUriPrefix: URL?
+        public let link: URL
         public let androidInfo: Android?
         public let iosInfo: Ios?
         public let navigationInfo: Navigation?
         public let analyticsInfo: Analytics?
         public let socialMetaTagInfo: SocialMetaTag?
         
-        public init(domainUriPrefix: String? = nil,
-                    link: String,
+        public init(domainUriPrefix: URL? = nil,
+                    link: URL,
                     androidInfo: Android? = nil,
                     iosInfo: Ios? = nil,
                     navigationInfo: Navigation? = nil,
@@ -40,11 +41,11 @@ public struct DynamicLinkRequest: FirebaseRequestModel {
         public struct Android: FirebaseRequestModel {
             
             public let androidPackageName: String
-            public let androidFallbackLink: String?
+            public let androidFallbackLink: URL?
             public let androidMinPackageVersionCode: String?
             
             public init(packageName: String,
-                        fallbackLink: String? = nil,
+                        fallbackLink: URL? = nil,
                         minPackageVersionCode: String? = nil) {
                 
                 self.androidPackageName = packageName
@@ -57,16 +58,16 @@ public struct DynamicLinkRequest: FirebaseRequestModel {
             
             public let iosBundleId: String
             public let iosAppStoreId: String
-            public let iosFallbackLink: String?
+            public let iosFallbackLink: URL?
             public let iosCustomScheme: String?
-            public let iosIpadFallbackLink: String?
+            public let iosIpadFallbackLink: URL?
             public let iosIpadBundleId: String?
             
             public init(bundleId: String,
                         appStoreId: String,
-                        fallbackLink: String? = nil,
+                        fallbackLink: URL? = nil,
                         customScheme: String? = nil,
-                        ipadFallbackLink: String? = nil,
+                        ipadFallbackLink: URL? = nil,
                         ipadBundleId: String? = nil) {
                 
                 self.iosBundleId = bundleId
@@ -169,11 +170,11 @@ public struct DynamicLinkRequest: FirebaseRequestModel {
             
             public let socialTitle: String
             public let socialDescription: String
-            public let socialImageLink: String
+            public let socialImageLink: URL
             
             public init(socialTitle: String,
                         socialDescription: String,
-                        socialImageLink: String) {
+                        socialImageLink: URL) {
                 
                 self.socialTitle = socialTitle
                 self.socialDescription = socialDescription

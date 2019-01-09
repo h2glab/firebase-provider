@@ -4,6 +4,6 @@ import Foundation
 extension DynamicLinkRequest {
 
     static var dummy: DynamicLinkRequest {
-        return DynamicLinkRequest(dynamicLink: DynamicLinkRequest.DynamicLink(link: "http://link"), suffix: DynamicLinkRequest.Suffix(option: .SHORT))
+        return DynamicLinkRequest(dynamicLink: DynamicLinkRequest.DynamicLink(link: URL(string: "http://link")!), suffix: DynamicLinkRequest.Suffix(option: .SHORT))
     }
 }
