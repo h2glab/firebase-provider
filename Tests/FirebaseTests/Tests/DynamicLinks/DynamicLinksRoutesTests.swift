@@ -8,13 +8,16 @@ final class DynamicLinksRoutesTests: XCTestCase {
         // Given
         let request = DynamicLinkRequest(dynamicLink: DynamicLinkRequest.DynamicLink(link: URL(string: "http://link")!),
                 suffix: DynamicLinkRequest.Suffix(option: .SHORT))
-        let expectedJson = "{\"suffix\":{\"option\":\"SHORT\"},\"dynamicLinkInfo\":{\"link\":\"http:\\/\\/link\"}}"
 
         // When
         let json = try request.toEncodedBody()
 
         // Then
-        XCTAssertEqual(json, expectedJson)
+        do {
+            let _ = try JSONDecoder().decode(DynamicLinkRequest.self, from: json.data(using: .utf8)!)
+        } catch {
+            XCTFail("Failed to encode and decode the request (\(error))")
+        }
     }
 
     func test_createShortLink_should_callShortLinksEndpointOnce_on_call() throws {
