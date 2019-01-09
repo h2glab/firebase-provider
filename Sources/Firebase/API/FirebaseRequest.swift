@@ -3,13 +3,13 @@ import HTTP
 import Vapor
 
 public protocol FirebaseRequest: class {
-    func serializedResponse<FM: FirebaseModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<FM>
+    func validateResponse<FM: FirebaseModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<FM>
     func send<FM: FirebaseModel>(method: HTTPMethod, url: String, query: String, body: LosslessHTTPBodyRepresentable, headers: HTTPHeaders) throws -> Future<FM>
 }
 
 public extension FirebaseRequest {
 
-    public func serializedResponse<FM: FirebaseModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<FM> {
+    public func validateResponse<FM: FirebaseModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<FM> {
         let decoder = JSONDecoder()
 
         guard response.status == .ok else {
@@ -49,7 +49,7 @@ public class FirebaseAPIRequest: FirebaseRequest {
         return httpClient.send(method, headers: finalHeaders, to: fullUrl) { (request: Request) in
             return request.http.body = body.convertToHTTPBody()
         }.flatMap(to: FM.self) { (response) -> Future<FM> in
-            return try self.serializedResponse(response: response.http, worker: self.httpClient.container.eventLoop)
+            return try self.validateResponse(response: response.http, worker: self.httpClient.container.eventLoop)
         }
     }
     
