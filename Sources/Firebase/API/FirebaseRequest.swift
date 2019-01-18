@@ -2,6 +2,10 @@ import Foundation
 import HTTP
 import Vapor
 
+/// The maximum streaming body size to allow.
+/// This only applies to streaming bodies, like chunked streams.
+private let maxStreamingBodySize: Int = 1_000_000
+
 public protocol FirebaseRequest: class {
     func validateResponse<FM: FirebaseModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<FM>
     func send<FM: FirebaseModel>(method: HTTPMethod, url: String, query: String, body: LosslessHTTPBodyRepresentable, headers: HTTPHeaders) throws -> Future<FM>
@@ -13,12 +17,12 @@ public extension FirebaseRequest {
         let decoder = JSONDecoder()
 
         guard response.status == .ok else {
-            return try decoder.decode(FirebaseError.self, from: response, maxSize: 65_536, on: worker).map(to: FM.self) { error in
+            return try decoder.decode(FirebaseError.self, from: response, maxSize: maxStreamingBodySize, on: worker).map(to: FM.self) { error in
                 throw error
             }
         }
 
-        return try decoder.decode(FM.self, from: response, maxSize: 65_536, on: worker)
+        return try decoder.decode(FM.self, from: response, maxSize: maxStreamingBodySize, on: worker)
     }
 }
 
