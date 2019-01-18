@@ -1,5 +1,5 @@
-import XCTest
 @testable import Firebase
+import XCTest
 
 final class ProviderTests: XCTestCase {
 
